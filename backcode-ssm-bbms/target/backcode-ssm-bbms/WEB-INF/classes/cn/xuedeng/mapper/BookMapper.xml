@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xuedeng.mapper.BookMapper">
+    <!--新增图书-->
+    <insert id="addBook" parameterType="map" keyProperty="id">
+        insert into bookmanage(
+        bookName,
+        author,
+        inventory,
+        price
+        )values(
+        #{bookName},
+        #{author},
+        #{inventory},
+        #{price}
+        )
+    </insert>
+    <!--编辑图书-->
+    <update id="editBook" parameterType="map" keyProperty="id">
+        update bookmanage set
+        bookName=#{bookName},
+        author=#{author},
+        inventory=#{inventory},
+        price=#{price}
+        where bId=#{bId}
+    </update>
+    <!--删除图书-->
+    <delete id="delBook" parameterType="map" >
+        delete from bookmanage where bId=#{bId}
+    </delete>
+    <!--查询图书列表-->
+    <select id="queryBookList" parameterType="map" resultType="Book">
+        select * from bookmanage
+        <where>
+            <if test="bId!=null and bId!=''">bId=#{bId}</if>
+            <if test="bookName!=null and bookName!=''">and bookName like concat('%',#{bookName},'%')</if>
+            <if test="author!=null and author!=''">and author like concat('%',#{author},'%')</if>
+        </where>
+    </select>
+    <!--借阅图书-->
+    <insert id="addSubBook" parameterType="map" keyProperty="id">
+        insert into t_user_sub(
+        uId,
+        bId,
+        subDateTime,
+        returnDateTime,
+        bookType,
+        returnType
+        )values(
+        #{uId},
+        #{bId},
+        #{subDateTime},
+        #{returnDateTime},
+        #{bookType},
+        #{returnType}
+        )
+    </insert>
+    <!--归还图书-->
+    <update id="returnSubBook" parameterType="map" keyProperty="id">
+        update t_user_sub
+        <set>
+            <if test="returnDateTime!=null and returnDateTime!=''">
+                returnDateTime = #{returnDateTime},
+            </if>
+            <if test="bookType!=null and bookType=='2'.toString()">
+                bookType = #{bookType},
+            </if>
+            <if test="returnType!=null and returnType!=''">
+                returnType = #{returnType}
+            </if>
+        </set>
+        <where>
+            <if test="uId!=null and uId!=''">
+                uId = #{uId}
+            </if>
+            <if test="bId!=null and bId!=''">
+                and bId = #{bId}
+            </if>
+            <if test="bookType!=null and bookType=='1'.toString()">
+                and bookType = #{bookType}
+            </if>
+        </where>
+    </update>
+    <!--查询借阅图书列表-->
+    <select id="queryBookSubList" parameterType="map" resultType="BookSub">
+        select * from t_user_sub  join bookmanage on t_user_sub.bId=bookmanage.bId
+        <where>
+            <if test="uId!=null and uId!=''">t_user_sub.uId=#{uId}</if>
+            <if test="bId!=null and bId!=''">and t_user_sub.bId=#{bId}</if>
+            <if test="subDateTime!=null and subDateTime!=''">and t_user_sub.subDateTime like concat('%',#{subDateTime},'%')</if>
+            <if test="returnDateTime!=null and returnDateTime!=''">and t_user_sub.returnDateTime like concat('%',#{returnDateTime},'%')</if>
+            <if test="bookType!=null and bookType!=''">and t_user_sub.bookType=#{bookType}</if>
+            <if test="returnType!=null and returnType!=''">and t_user_sub.returnType=#{returnType}</if>
+        </where>
+    </select>
+    <!--更新图书库存-->
+    <update id="updateInventory" parameterType="map" keyProperty="id">
+        update bookmanage set inventory=#{inventory} where bId=#{bId}
+    </update>
+</mapper>

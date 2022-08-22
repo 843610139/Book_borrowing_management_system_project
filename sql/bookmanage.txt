@@ -1,0 +1,8 @@
+"bId"	"bookName"	"author"	"inventory"	"price"
+"2"	"自传"	"admin"	"39"	"88"
+"3"	"java从入门到放弃"	"admin"	"15"	"99"
+"4"	"spring从入门到破防"	"admin"	"99"	"99"
+"5"	"java从入门到坟通"	"徐瑞滨"	"98"	"79"
+"6"	"spring从入门到退出"	"徐瑞滨"	"10"	"89"
+"7"	"mysql从入门到踹门"	"徐瑞滨"	"1000"	"99"
+"8"	"java从入门到掌厨"	"admin"	"1"	"39"
